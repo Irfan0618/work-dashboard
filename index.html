@@ -976,6 +976,20 @@ function downloadExcel() {
 (async function boot() {
   const gotServerData = await loadFromServer();
   if (!gotServerData) load();
+  // Hosted copy (no local server): seed from data.json on first visit only.
+  if (!gotServerData && !S.people.length) {
+    try {
+      const res = await fetch('data.json', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && Array.isArray(data.people) && data.people.length) {
+          S = data;
+          migrate();
+          try { localStorage.setItem('wtd_v5', JSON.stringify(S)); } catch(e) {}
+        }
+      }
+    } catch(e) {}
+  }
   render();
 })();
 </script>
