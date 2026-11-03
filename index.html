@@ -327,6 +327,34 @@ body {
 .av0{background:#4f46e5} .av1{background:#059669} .av2{background:#dc2626}
 .av3{background:#d97706} .av4{background:#7c3aed} .av5{background:#0891b2}
 .av6{background:#be185d} .av7{background:#065f46}
+
+/* ── LOGIN / USER ────────────────────────────────────── */
+.login-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: #eef0f5;
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.login-overlay.hidden { display: none; }
+.login-card {
+  background: white; border-radius: 14px; width: 100%; max-width: 360px;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.12); padding: 28px 26px;
+}
+.login-card h2 { font-size: 1.15rem; color: #1a1a2e; margin-bottom: 4px; }
+.login-card p.sub { font-size: 0.82rem; color: #6b7280; margin-bottom: 18px; }
+.login-card label { display: block; font-size: 0.78rem; color: #374151; margin: 12px 0 4px; font-weight: 500; }
+.login-card input {
+  width: 100%; padding: 9px 11px; border: 1px solid #d1d5db; border-radius: 7px;
+  font-size: 0.9rem; font-family: inherit;
+}
+.login-card input:focus { outline: 2px solid #4f46e5; outline-offset: -1px; border-color: transparent; }
+.login-card .btn { width: 100%; margin-top: 18px; padding: 10px 14px; font-size: 0.9rem; }
+.login-card .btn:disabled { opacity: .6; cursor: default; }
+.login-err { color: #b91c1c; font-size: 0.8rem; margin-top: 12px; min-height: 1em; }
+.login-link { background: none; border: none; color: #4f46e5; font-size: 0.8rem; cursor: pointer; margin-top: 10px; padding: 0; }
+.login-link:hover { text-decoration: underline; }
+.user-chip { display: none; align-items: center; gap: 8px; font-size: 0.78rem; color: #cbd5e1; }
+.user-chip.visible { display: flex; }
+.btn-ghost { background: rgba(255,255,255,0.12); color: white; } .btn-ghost:hover { background: rgba(255,255,255,0.22); }
 </style>
 </head>
 <body>
@@ -336,9 +364,27 @@ body {
   <h1>📋 Work Tracking Dashboard</h1>
   <div class="header-actions">
     <span id="syncStatus" class="sync-status"></span>
+    <span id="userChip" class="user-chip"><span id="userEmail"></span>
+      <button class="btn btn-ghost" onclick="window.fbSignOut && window.fbSignOut()">Sign out</button>
+    </span>
     <button class="btn btn-green"  onclick="downloadExcel()">⬇ Download Excel</button>
     <button class="btn btn-indigo" onclick="openAddPerson()">+ Add Person</button>
   </div>
+</div>
+
+<!-- ══ LOGIN ═════════════════════════════════════════════ -->
+<div class="login-overlay" id="loginOverlay">
+  <form class="login-card" id="loginForm" autocomplete="on">
+    <h2>📋 Work Dashboard</h2>
+    <p class="sub">Sign in to view and update tasks.</p>
+    <label for="loginEmail">Email</label>
+    <input type="email" id="loginEmail" autocomplete="username" required>
+    <label for="loginPassword">Password</label>
+    <input type="password" id="loginPassword" autocomplete="current-password" required>
+    <button type="submit" class="btn btn-indigo" id="loginBtn">Sign in</button>
+    <div class="login-err" id="loginErr" role="alert"></div>
+    <button type="button" class="login-link" id="resetLink">Forgot password?</button>
+  </form>
 </div>
 
 <!-- ══ DASHBOARD ══════════════════════════════════════════ -->
@@ -424,45 +470,46 @@ let editEmailEditing = false;  // true = show input, false = show chip
 
 /* ═══════════════════════════════════════════════════════
    PERSISTENCE
-   Saves to disk (data.json, via the local server started by
-   start_email_server.bat) so data survives a browser reset or
-   OS reinstall. localStorage is kept as an instant local cache
-   and offline fallback when that server isn't running.
+   Data lives in Firebase Firestore (collection "people", one
+   document per person) and syncs live between everyone who is
+   signed in. See the Firebase module at the bottom of this file.
 ═══════════════════════════════════════════════════════ */
-const SERVER_URL = 'http://localhost:5757';
+const SERVER_URL = 'http://localhost:5757';   // local email server only (/send)
 let saveDebounceTimer = null;
+let applyingRemote = false;
 
+// Unique ids so two people adding items at the same time never collide.
+function newId() { return Date.now() * 1000 + Math.floor(Math.random() * 1000); }
+
+// Every change calls save(); the Firebase module (fbPush) writes only what changed.
 function save() {
-  try { localStorage.setItem('wtd_v5', JSON.stringify(S)); } catch(e) {}
+  if (applyingRemote) return;
   clearTimeout(saveDebounceTimer);
-  saveDebounceTimer = setTimeout(saveToServer, 400);
+  saveDebounceTimer = setTimeout(async () => {
+    saveDebounceTimer = null;
+    if (window.fbPush) await window.fbPush(S.people);
+  }, 400);
+}
+function hasPendingSave() { return saveDebounceTimer !== null; }
+
+// Called by the Firebase module when data arrives from the server.
+function applyRemotePeople(people) {
+  applyingRemote = true;
+  try { S.people = people; migrate(); renderMain(); renderStack(); }
+  finally { applyingRemote = false; }
 }
 
-async function saveToServer() {
-  try {
-    const res = await fetch(SERVER_URL + '/data', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(S),
-      signal: AbortSignal.timeout(5000)
-    });
-    setSyncStatus(res.ok);
-  } catch(e) {
-    setSyncStatus(false);
-  }
-}
-
-function setSyncStatus(online) {
+function setSyncStatus(online, detail) {
   const el = document.getElementById('syncStatus');
   if (!el) return;
   if (online) {
     el.className = 'sync-status synced';
-    el.innerHTML = '<span class="dot"></span>Saved to disk';
-    el.title = '';
+    el.innerHTML = '<span class="dot"></span>Synced';
+    el.title = 'Changes are saved online and shared with everyone.';
   } else {
     el.className = 'sync-status offline';
-    el.innerHTML = '<span class="dot"></span>Local only';
-    el.title = "start_email_server.bat isn't running — changes are only saved in this browser and could be lost. Start it to save permanently.";
+    el.innerHTML = '<span class="dot"></span>Offline';
+    el.title = detail || "Can't reach the server. Changes may not be saved.";
   }
 }
 
@@ -480,37 +527,6 @@ function migrate() {
       if (!('dueDate' in t))         t.dueDate   = null;
     });
   });
-}
-
-function load() {
-  try {
-    const raw = localStorage.getItem('wtd_v5')
-             || localStorage.getItem('wtd_v4')
-             || localStorage.getItem('wtd_v3')
-             || localStorage.getItem('wtd_v2');
-    if (raw) S = JSON.parse(raw);
-    migrate();
-  } catch(e) {}
-}
-
-// Returns true if state was loaded from the server (data.json).
-async function loadFromServer() {
-  try {
-    const res = await fetch(SERVER_URL + '/data', { signal: AbortSignal.timeout(4000) });
-    if (!res.ok) throw new Error('bad status');
-    const data = await res.json();
-    setSyncStatus(true);
-    if (data && Array.isArray(data.people) && data.people.length) {
-      S = data;
-      migrate();
-      try { localStorage.setItem('wtd_v5', JSON.stringify(S)); } catch(e) {}
-      return true;
-    }
-    return false; // server reachable but no data saved there yet
-  } catch(e) {
-    setSyncStatus(false);
-    return false;
-  }
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -757,7 +773,7 @@ function confirmTask() {
   const inp=document.getElementById('taskInput'); if(!inp) return;
   const text=inp.value.trim(); if(!text){inp.focus();return;}
   const mp=focusedPerson(); if(!mp) return;
-  mp.tasks.push({id:S.tid++,text,completed:false,important:false,dueDate:null,createdAt:new Date().toISOString()});
+  mp.tasks.push({id:newId(),text,completed:false,important:false,dueDate:null,createdAt:new Date().toISOString()});
   hideTaskInput(); render();
 }
 
@@ -807,7 +823,7 @@ function openAddPerson() { document.getElementById('addPersonOverlay').style.dis
 function closeAddPerson() { document.getElementById('addPersonOverlay').style.display='none'; document.getElementById('personNameInput').value=''; }
 function confirmAddPerson() {
   const inp=document.getElementById('personNameInput'), name=inp.value.trim(); if(!name){inp.focus();return;}
-  const person={id:S.pid++,name,tasks:[],email:''};
+  const person={id:newId(),name,tasks:[],email:'',order:Date.now()};
   S.people.push(person);
   closeAddPerson(); render();
 }
@@ -973,25 +989,165 @@ function downloadExcel() {
 /* ═══════════════════════════════════════════════════════
    BOOT
 ═══════════════════════════════════════════════════════ */
-(async function boot() {
-  const gotServerData = await loadFromServer();
-  if (!gotServerData) load();
-  // Hosted copy (no local server): seed from data.json on first visit only.
-  if (!gotServerData && !S.people.length) {
-    try {
-      const res = await fetch('data.json', { cache: 'no-store' });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && Array.isArray(data.people) && data.people.length) {
-          S = data;
-          migrate();
-          try { localStorage.setItem('wtd_v5', JSON.stringify(S)); } catch(e) {}
-        }
-      }
-    } catch(e) {}
+// Data is loaded by the Firebase module below once the user signs in.
+renderMain(); renderStack();
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, collection, doc, onSnapshot, writeBatch }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAUplg-dxaPoULlXo-hqG5LZN355mQSefs",
+  authDomain: "work-dashboard-75783.firebaseapp.com",
+  projectId: "work-dashboard-75783",
+  storageBucket: "work-dashboard-75783.firebasestorage.app",
+  messagingSenderId: "240617363261",
+  appId: "1:240617363261:web:f9cb8378f1d7ba595b1754"
+};
+
+// Only these accounts may seed the very first data (the security rules decide who can read/write).
+const OWNERS = ['mohammad.irfan@takachar.com', 'irfan0618@gmail.com'];
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const peopleCol = collection(db, 'people');
+const $ = id => document.getElementById(id);
+
+let currentUser = null;
+let unsub = null;
+let latestRemote = null;
+let seeding = false;
+const lastSynced = new Map();   // person id -> canonical JSON last known on the server
+
+// Stable JSON (sorted keys) so key order never causes false "changes".
+function canon(v) {
+  if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']';
+  if (v && typeof v === 'object') return '{' + Object.keys(v).sort().map(k => JSON.stringify(k) + ':' + canon(v[k])).join(',') + '}';
+  return JSON.stringify(v === undefined ? null : v);
+}
+function clean(p, idx) {
+  return JSON.parse(JSON.stringify({
+    id: p.id, name: p.name, email: p.email || '', tasks: p.tasks || [],
+    order: (p.order !== undefined ? p.order : idx)
+  }));
+}
+
+/* ── write only the people that changed ── */
+window.fbPush = async function (people) {
+  if (!currentUser) return;
+  try {
+    const batch = writeBatch(db), pending = new Map();
+    people.forEach((p, i) => {
+      const data = clean(p, i), j = canon(data), key = String(data.id);
+      if (lastSynced.get(key) !== j) { batch.set(doc(peopleCol, key), data); pending.set(key, j); }
+    });
+    if (pending.size) {
+      await batch.commit();
+      pending.forEach((j, k) => lastSynced.set(k, j));
+    }
+    setSyncStatus(true);
+  } catch (e) {
+    console.error(e);
+    setSyncStatus(false, 'Save failed: ' + (e.code || e.message));
+    showToast('⚠ Could not save changes (' + (e.code || 'error') + ')');
   }
-  render();
-})();
+};
+
+/* ── show remote data, but never while you are typing or have an unsent change ── */
+function applyLatest() {
+  if (!latestRemote) return;
+  const a = document.activeElement;
+  const typing = a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA') && !$('loginOverlay').contains(a);
+  if (hasPendingSave() || typing) { setTimeout(applyLatest, 1000); return; }
+  const people = latestRemote; latestRemote = null;
+  if (canon(people.map((p, i) => clean(p, i))) === canon(S.people.map((p, i) => clean(p, i)))) return;
+  applyRemotePeople(people);
+}
+
+async function seedFromDataJson() {
+  if (seeding) return; seeding = true;
+  try {
+    const res = await fetch('data.json', { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const people = (data.people || []).map((p, i) => clean(p, i));
+    if (!people.length) return;
+    const batch = writeBatch(db);
+    people.forEach(p => batch.set(doc(peopleCol, String(p.id)), p));
+    await batch.commit();
+    showToast('✅ Imported ' + people.length + ' people');
+  } catch (e) { console.error(e); showToast('⚠ Import failed (' + (e.code || e.message) + ')'); }
+  finally { seeding = false; }
+}
+
+function startSync() {
+  stopSync();
+  unsub = onSnapshot(peopleCol, snap => {
+    setSyncStatus(true);
+    const people = snap.docs.map(d => d.data())
+      .map((p, i) => clean(p, i))
+      .sort((a, b) => a.order - b.order);
+    people.forEach(p => lastSynced.set(String(p.id), canon(p)));
+    if (!people.length && !snap.metadata.fromCache && OWNERS.includes((currentUser.email || '').toLowerCase())) {
+      seedFromDataJson();
+      return;
+    }
+    latestRemote = people;
+    applyLatest();
+  }, err => {
+    console.error(err);
+    const denied = err.code === 'permission-denied';
+    setSyncStatus(false, denied ? 'This account does not have access.' : 'Sync error: ' + err.code);
+    if (denied) showToast('⛔ This account does not have access to the dashboard.');
+  });
+}
+function stopSync() { if (unsub) { unsub(); unsub = null; } lastSynced.clear(); latestRemote = null; }
+
+/* ── sign in / out ── */
+const ERRORS = {
+  'auth/invalid-credential': 'Wrong email or password.',
+  'auth/wrong-password': 'Wrong email or password.',
+  'auth/user-not-found': 'Wrong email or password.',
+  'auth/invalid-email': 'Please enter a valid email.',
+  'auth/too-many-requests': 'Too many attempts. Wait a few minutes and try again.',
+  'auth/network-request-failed': 'Network problem. Check your connection.'
+};
+$('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  $('loginErr').textContent = ''; $('loginBtn').disabled = true;
+  try { await signInWithEmailAndPassword(auth, $('loginEmail').value.trim(), $('loginPassword').value); }
+  catch (err) { $('loginErr').textContent = ERRORS[err.code] || ('Sign-in failed (' + err.code + ').'); }
+  finally { $('loginBtn').disabled = false; }
+});
+$('resetLink').addEventListener('click', async () => {
+  const email = $('loginEmail').value.trim();
+  if (!email) { $('loginErr').textContent = 'Enter your email above first.'; return; }
+  try { await sendPasswordResetEmail(auth, email); $('loginErr').style.color = '#047857'; $('loginErr').textContent = 'If that account exists, a reset email has been sent.'; }
+  catch (err) { $('loginErr').style.color = '#b91c1c'; $('loginErr').textContent = ERRORS[err.code] || ('Could not send reset email (' + err.code + ').'); }
+});
+window.fbSignOut = () => signOut(auth);
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  if (user) {
+    $('loginErr').textContent = ''; $('loginErr').style.color = '#b91c1c'; $('loginPassword').value = '';
+    $('loginOverlay').classList.add('hidden');
+    $('userEmail').textContent = user.email;
+    $('userChip').classList.add('visible');
+    startSync();
+  } else {
+    stopSync();
+    applyRemotePeople([]);
+    $('userChip').classList.remove('visible');
+    $('loginOverlay').classList.remove('hidden');
+    $('syncStatus').className = 'sync-status'; $('syncStatus').innerHTML = '';
+  }
+});
 </script>
 </body>
 </html>
