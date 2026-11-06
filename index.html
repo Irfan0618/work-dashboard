@@ -355,6 +355,84 @@ body {
 .user-chip { display: none; align-items: center; gap: 8px; font-size: 0.78rem; color: #cbd5e1; }
 .user-chip.visible { display: flex; }
 .btn-ghost { background: rgba(255,255,255,0.12); color: white; } .btn-ghost:hover { background: rgba(255,255,255,0.22); }
+
+/* ── v2: roles, hierarchy, status, requests, assessment ─── */
+body:not(.owner) .owner-only { display: none !important; }
+.hdr-badge { background: #ef4444; color: white; border-radius: 9px; padding: 0 6px; font-size: 0.68rem; margin-left: 5px; }
+.header-actions { align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+
+.sub-wrap { margin: 0 0 6px 26px; border-left: 2px solid #e5e7eb; padding-left: 8px; }
+.task-item.sub-task { padding: 5px 7px; margin-bottom: 4px; background: #fcfcfd; }
+.task-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 4px; }
+.meta-dates { font-size: 0.7rem; color: #6b7280; }
+.tick-btn:disabled { cursor: default; }
+.tick-btn:disabled:hover { border-color: #d1d5db; color: transparent; }
+.task-item.done .tick-btn:disabled:hover { border-color: #059669; color: white; }
+
+.st-sel {
+  font-size: 0.7rem; border: 1px solid #d1d5db; border-radius: 5px;
+  padding: 1px 3px; background: white; cursor: pointer; color: #374151; font-family: inherit;
+}
+.st-sel.st-doing   { border-color: #818cf8; color: #4338ca; background: #eef2ff; }
+.st-sel.st-blocked { border-color: #fca5a5; color: #b91c1c; background: #fef2f2; }
+.st-sel.st-done    { border-color: #86efac; color: #047857; background: #f0fdf4; }
+.st-badge { font-size: 0.68rem; font-weight: 600; padding: 1px 7px; border-radius: 9px; background: #f3f4f6; color: #4b5563; }
+.st-badge.st-doing   { background: #eef2ff; color: #4338ca; }
+.st-badge.st-blocked { background: #fef2f2; color: #b91c1c; }
+.st-badge.st-done    { background: #f0fdf4; color: #047857; }
+
+.flag-btn { border: none; background: transparent; cursor: pointer; font-size: 0.8rem; opacity: .35; padding: 0 2px; filter: grayscale(1); line-height: 1; }
+.flag-btn:hover { opacity: .8; }
+.flag-btn.on { opacity: 1; filter: none; }
+.chip { font-size: 0.68rem; padding: 1px 7px; border-radius: 9px; background: #fef3c7; color: #92400e; white-space: nowrap; }
+.chip.red  { background: #fee2e2; color: #b91c1c; }
+.chip.gray { background: #f3f4f6; color: #4b5563; }
+.chip.blue { background: #e0e7ff; color: #3730a3; }
+
+.task-item.due-crit .st-sel { background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.5); }
+.task-item.due-crit .st-sel option { color: #111827; }
+.task-item.due-crit .st-badge { background: rgba(255,255,255,0.22); color: white; }
+.task-item.due-crit .meta-dates { color: rgba(255,255,255,0.85); }
+.task-item.due-crit .chip { background: rgba(255,255,255,0.22); color: white; }
+
+.modal textarea {
+  width: 100%; padding: 8px 11px; border: 2px solid #e5e7eb; border-radius: 7px;
+  font: inherit; font-size: 0.89rem; outline: none; margin-bottom: 12px; resize: vertical;
+}
+.modal textarea:focus, .modal input[type=date]:focus { border-color: #4f46e5; }
+.modal input[type=date] {
+  width: 100%; padding: 8px 11px; border: 2px solid #e5e7eb; border-radius: 7px;
+  font-size: 0.89rem; outline: none; margin-bottom: 12px; font-family: inherit;
+}
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chk { display: flex; align-items: center; gap: 7px; font-size: 0.84rem; color: #374151; margin-bottom: 12px; }
+.modal-hint { font-size: 0.76rem; color: #6b7280; margin-bottom: 10px; }
+.modal.xl { width: min(940px, 94vw); max-height: 88vh; overflow: auto; }
+.modal.big { width: min(640px, 94vw); max-height: 88vh; overflow: auto; }
+.modal h3 .x { margin-left: auto; background: none; border: none; font-size: 1.1rem; color: #9ca3af; cursor: pointer; }
+
+table.asm { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-bottom: 14px; }
+table.asm th { text-align: right; font-weight: 600; color: #6b7280; padding: 6px 8px; border-bottom: 2px solid #e5e7eb; white-space: nowrap; }
+table.asm td { text-align: right; padding: 7px 8px; border-bottom: 1px solid #f3f4f6; }
+table.asm th:first-child, table.asm td:first-child { text-align: left; font-weight: 600; color: #1f2937; }
+table.asm tr.total td { border-top: 2px solid #e5e7eb; font-weight: 700; background: #f9fafb; }
+.asm .bad { color: #b91c1c; font-weight: 700; }
+.asm .good { color: #047857; font-weight: 700; }
+.asm-sec { font-size: 0.82rem; font-weight: 700; color: #374151; margin: 6px 0 8px; }
+.att-row { display: flex; gap: 10px; align-items: flex-start; padding: 7px 10px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 6px; font-size: 0.8rem; }
+.att-row .who { font-weight: 600; min-width: 120px; color: #1f2937; }
+.att-row .what { flex: 1; color: #374151; }
+.legend { font-size: 0.72rem; color: #6b7280; margin-top: 8px; }
+
+.req-card { border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 11px 13px; margin-bottom: 10px; }
+.req-card.pending { border-color: #fcd34d; background: #fffbeb; }
+.req-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 5px; font-size: 0.82rem; }
+.req-top b { color: #1f2937; }
+.req-task { font-size: 0.88rem; color: #111827; margin-bottom: 4px; }
+.req-reason { font-size: 0.82rem; color: #374151; background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 9px; margin: 6px 0; white-space: pre-wrap; }
+.req-prop { font-size: 0.78rem; color: #4b5563; margin: 3px 0; }
+.req-actions { display: flex; gap: 8px; margin-top: 8px; }
+.btn-red { background: #dc2626; color: white; } .btn-red:hover { background: #b91c1c; }
 </style>
 </head>
 <body>
@@ -367,8 +445,10 @@ body {
     <span id="userChip" class="user-chip"><span id="userEmail"></span>
       <button class="btn btn-ghost" onclick="window.fbSignOut && window.fbSignOut()">Sign out</button>
     </span>
+    <button class="btn btn-ghost" onclick="openAssessment()">📊 Assessment</button>
+    <button class="btn btn-ghost" onclick="openRequests()">📥 <span id="rqLabel">Requests</span><span id="rqBadge" class="hdr-badge" style="display:none"></span></button>
     <button class="btn btn-green"  onclick="downloadExcel()">⬇ Download Excel</button>
-    <button class="btn btn-indigo" onclick="openAddPerson()">+ Add Person</button>
+    <button class="btn btn-indigo owner-only" onclick="openAddPerson()">+ Add Person</button>
   </div>
 </div>
 
@@ -442,6 +522,60 @@ body {
   </div>
 </div>
 
+<!-- ══ MODAL: ADD / EDIT TASK ════════════════════════════ -->
+<div class="overlay" id="taskOverlay" style="display:none" onclick="if(event.target===this)closeTaskModal()">
+  <div class="modal wide" onclick="event.stopPropagation()">
+    <h3 id="tmHeading">Add task</h3>
+    <div class="modal-hint" id="tmContext"></div>
+    <div class="modal-label">Title</div>
+    <input type="text" id="tmText" maxlength="300" placeholder="What needs to be done?"
+           onkeydown="if(event.key==='Enter')submitTaskModal();if(event.key==='Escape')closeTaskModal();">
+    <div class="row2">
+      <div><div class="modal-label">Start date</div><input type="date" id="tmStart"></div>
+      <div><div class="modal-label">Due date</div><input type="date" id="tmDue"></div>
+    </div>
+    <label class="chk"><input type="checkbox" id="tmImp"> ⭐ Important</label>
+    <div id="tmReasonWrap" style="display:none">
+      <div class="modal-label">Reason for the change (required)</div>
+      <textarea id="tmReason" rows="3" maxlength="500" placeholder="Why does this need to change?"></textarea>
+    </div>
+    <div class="modal-hint" id="tmHint"></div>
+    <div class="modal-actions">
+      <button class="btn-sm btn-sm-cancel" onclick="closeTaskModal()">Cancel</button>
+      <button class="btn-sm btn-indigo btn" id="tmOk" onclick="submitTaskModal()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: ASK FOR TEXT (reasons, notes) ══════════════ -->
+<div class="overlay" id="askOverlay" style="display:none" onclick="if(event.target===this)closeAsk(null)">
+  <div class="modal wide" onclick="event.stopPropagation()">
+    <h3 id="txTitle"></h3>
+    <div class="modal-label" id="txLabel"></div>
+    <textarea id="txInput" rows="3" maxlength="500"></textarea>
+    <div class="modal-actions">
+      <button class="btn-sm btn-sm-cancel" onclick="closeAsk(null)">Cancel</button>
+      <button class="btn-sm btn-indigo btn" id="txOk" onclick="submitAsk()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: ASSESSMENT ═════════════════════════════════ -->
+<div class="overlay" id="assessOverlay" style="display:none" onclick="if(event.target===this)closeAssessment()">
+  <div class="modal xl" onclick="event.stopPropagation()">
+    <h3>📊 Assessment <button class="x" onclick="closeAssessment()">✕</button></h3>
+    <div id="assessBody"></div>
+  </div>
+</div>
+
+<!-- ══ MODAL: REQUESTS ═══════════════════════════════════ -->
+<div class="overlay" id="reqOverlay" style="display:none" onclick="if(event.target===this)closeRequests()">
+  <div class="modal big" onclick="event.stopPropagation()">
+    <h3 id="rqTitle">📥 Requests <button class="x" onclick="closeRequests()">✕</button></h3>
+    <div id="reqBody"></div>
+  </div>
+</div>
+
 <!-- ══ TOAST ══════════════════════════════════════════════ -->
 <div class="toast" id="toast"></div>
 
@@ -456,23 +590,32 @@ const EDIT_ICON = `<svg viewBox="0 0 16 16" width="11" height="11" fill="none" s
 
 /* ═══════════════════════════════════════════════════════
    STATE
+   S.people[i].tasks is a flat list of that person's tasks.
+   A task with parentId is a sub-activity of that task.
 ═══════════════════════════════════════════════════════ */
-let S = { people: [], pid: 1, tid: 1 };
+const STATUSES = [
+  { k: 'todo',    label: 'Not started' },
+  { k: 'doing',   label: 'In progress' },
+  { k: 'blocked', label: 'Blocked' },
+  { k: 'done',    label: 'Done' }
+];
+const STATUS_LABEL = Object.fromEntries(STATUSES.map(s => [s.k, s.label]));
+
+let S    = { people: [] };
+let REQS = [];                                   // change / delete requests visible to this user
+let ME   = { email: '', role: null, personId: null };   // role: 'owner' | 'member' | null
+const DELETED = new Set();                       // task ids deleted locally, waiting to be removed online
 
 // UI-only state
-let focusedId         = null;   // null = Home overview (everyone); else id of the person being viewed
+let focusedId        = null;   // null = Home overview (everyone); else id of the person being viewed
 let expandedTasks    = new Set();
-let editingTaskId    = null;
 let completedOpen    = false;
 let editPersonId     = null;
-let editTempEmail    = '';      // single email string while editing
-let editEmailEditing = false;  // true = show input, false = show chip
+let editTempEmail    = '';
+let editEmailEditing = false;
 
 /* ═══════════════════════════════════════════════════════
-   PERSISTENCE
-   Data lives in Firebase Firestore (collection "people", one
-   document per person) and syncs live between everyone who is
-   signed in. See the Firebase module at the bottom of this file.
+   PERSISTENCE  (Firebase Firestore – see module at the bottom)
 ═══════════════════════════════════════════════════════ */
 const SERVER_URL = 'http://localhost:5757';   // local email server only (/send)
 let saveDebounceTimer = null;
@@ -481,13 +624,16 @@ let applyingRemote = false;
 // Unique ids so two people adding items at the same time never collide.
 function newId() { return Date.now() * 1000 + Math.floor(Math.random() * 1000); }
 
-// Every change calls save(); the Firebase module (fbPush) writes only what changed.
+// Every change calls save(); the Firebase module writes only what changed.
 function save() {
   if (applyingRemote) return;
   clearTimeout(saveDebounceTimer);
   saveDebounceTimer = setTimeout(async () => {
     saveDebounceTimer = null;
-    if (window.fbPush) await window.fbPush(S.people);
+    if (!window.fbPush) return;
+    const ids = Array.from(DELETED);
+    const ok = await window.fbPush(S.people, ids);
+    if (ok) ids.forEach(i => DELETED.delete(i));
   }, 400);
 }
 function hasPendingSave() { return saveDebounceTimer !== null; }
@@ -495,8 +641,25 @@ function hasPendingSave() { return saveDebounceTimer !== null; }
 // Called by the Firebase module when data arrives from the server.
 function applyRemotePeople(people) {
   applyingRemote = true;
-  try { S.people = people; migrate(); renderMain(); renderStack(); }
+  try { S.people = people; renderMain(); renderStack(); refreshOpenModals(); }
   finally { applyingRemote = false; }
+}
+function applyRemoteRequests(list) {
+  REQS = list;
+  updateReqBadge(); renderMain();
+  if (isOpen('reqOverlay')) renderRequests();
+}
+function setMe(me) {
+  ME = me;
+  document.body.classList.toggle('owner', isOwner());
+  const chip = document.getElementById('userEmail');
+  if (chip) chip.textContent = me.email + (me.role ? ' · ' + (me.role === 'owner' ? 'Owner' : 'Member') : '');
+  document.getElementById('rqLabel').textContent = isOwner() ? 'Requests' : 'My requests';
+  updateReqBadge(); renderMain(); renderStack();
+}
+function resetSession() {
+  S = { people: [] }; REQS = []; DELETED.clear(); focusedId = null;
+  setMe({ email: '', role: null, personId: null });
 }
 
 function setSyncStatus(online, detail) {
@@ -513,21 +676,13 @@ function setSyncStatus(online, detail) {
   }
 }
 
-function migrate() {
-  S.people.forEach(p => {
-    p.tasks  = p.tasks || [];
-    // emails[] → email string migration
-    if (Array.isArray(p.emails)) {
-      p.email = p.emails[0] || '';
-      delete p.emails;
-    }
-    if (!('email' in p)) p.email = '';
-    p.tasks.forEach(t => {
-      if (t.important === undefined) t.important = false;
-      if (!('dueDate' in t))         t.dueDate   = null;
-    });
-  });
-}
+/* ═══════════════════════════════════════════════════════
+   ROLES / PERMISSIONS  (the real enforcement is in the Firestore rules)
+═══════════════════════════════════════════════════════ */
+function isOwner()        { return ME.role === 'owner'; }
+function isOwnList(p)     { return ME.personId != null && ME.personId === p.id; }
+function canChangeStatus(p) { return isOwner() || isOwnList(p); }   // status + resources flag
+function canAddTo(p)      { return isOwner() || isOwnList(p); }
 
 /* ═══════════════════════════════════════════════════════
    HELPERS
@@ -535,12 +690,42 @@ function migrate() {
 function avClass(p)  { return 'av' + (S.people.indexOf(p) % 8); }
 function initials(n) { return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
 function focusedPerson() { return S.people.find(p => p.id === focusedId) || null; }
-function esc(s)        { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function esc(s)        { const d=document.createElement('div'); d.textContent=(s==null?'':s); return d.innerHTML; }
+function $(id) { return document.getElementById(id); }
+function isOpen(id) { const e=$(id); return !!e && e.style.display!=='none'; }
+
+const isDone = t => t.status === 'done';
+function sortTasks(arr) { return arr.slice().sort((a,b) => (a.order||0) - (b.order||0)); }
+function topTasks(p) {
+  const ids = new Set(p.tasks.map(t => t.id));
+  return p.tasks.filter(t => !t.parentId || !ids.has(t.parentId));   // orphans count as top level
+}
+function subTasks(p, parentId) { return sortTasks(p.tasks.filter(t => t.parentId === parentId)); }
+
+function parseLocalEnd(s) {          // 'YYYY-MM-DD' → end of that day, local time
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d, 23, 59, 59, 999);
+}
+function fmtD(s) {
+  if (!s) return '';
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+}
+function daysOverdue(t) { return Math.ceil((Date.now() - parseLocalEnd(t.dueDate).getTime()) / 86400000); }
+function isOverdue(t)   { return !isDone(t) && !!t.dueDate && Date.now() > parseLocalEnd(t.dueDate).getTime(); }
+function doneOnTime(t)  { return isDone(t) && !!t.dueDate && !!t.completedAt && new Date(t.completedAt) <= parseLocalEnd(t.dueDate); }
+function doneLate(t)    { return isDone(t) && !!t.dueDate && !!t.completedAt && new Date(t.completedAt) >  parseLocalEnd(t.dueDate); }
+function dueStatus(t) {
+  if (!isOverdue(t)) return '';
+  return daysOverdue(t) <= 7 ? 'due-warn' : 'due-crit';
+}
+function pendingReqFor(taskId) { return REQS.some(r => r.taskId === taskId && r.status === 'pending'); }
 
 function taskStats(p) {
-  const total=p.tasks.length, done=p.tasks.filter(t=>t.completed).length;
-  const imp=p.tasks.filter(t=>!t.completed&&t.important).length;
-  return { total, done, imp, pct: total?Math.round(done/total*100):0 };
+  const total = p.tasks.length, done = p.tasks.filter(isDone).length;
+  const imp = p.tasks.filter(t => !isDone(t) && t.important).length;
+  const overdue = p.tasks.filter(isOverdue).length;
+  return { total, done, imp, overdue, pct: total ? Math.round(done/total*100) : 0 };
 }
 
 function fmtDate(iso) {
@@ -561,91 +746,101 @@ function groupByDate(tasks) {
   tasks.forEach(t=>{const l=dateLabel(t.createdAt);(m[l]=m[l]||[]).push(t);});
   return ORD.filter(l=>m[l]).map(l=>({label:l,tasks:m[l]}));
 }
-function dueStatus(task) {
-  if (!task.dueDate||task.completed) return '';
-  const due=new Date(task.dueDate); due.setHours(23,59,59,999);
-  const ms=Date.now()-due.getTime();
-  if (ms<=0) return '';
-  return Math.ceil(ms/86400000)<=7 ? 'due-warn' : 'due-crit';
-}
 function showToast(msg,ms=2800) {
-  const el=document.getElementById('toast');
+  const el=$('toast');
   el.textContent=msg; el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'),ms);
 }
 
 /* ═══════════════════════════════════════════════════════
-   BUILD: TASK ITEM
+   BUILD: TASK ITEM (+ its sub-activities)
 ═══════════════════════════════════════════════════════ */
-function buildTask(pid, task, group) {
+function buildTask(p, task, group, isSub) {
+  const pid=p.id, tid=task.id, owner=isOwner(), own=canChangeStatus(p);
+  const done=isDone(task), exp=expandedTasks.has(tid), ds=dueStatus(task);
   const gi=group.indexOf(task), canUp=gi>0, canDown=gi<group.length-1;
-  const exp=expandedTasks.has(task.id), isEdit=editingTaskId===task.id;
-  const ds=dueStatus(task);
+  const subs=isSub?[]:subTasks(p,tid), subDone=subs.filter(isDone).length;
 
-  let datesHTML='';
+  const statusCtl = own
+    ? `<select class="st-sel st-${task.status}" onchange="setStatus(${pid},${tid},this.value)" onclick="event.stopPropagation()" title="Status">${
+        STATUSES.map(s=>`<option value="${s.k}" ${s.k===task.status?'selected':''}>${s.label}</option>`).join('')}</select>`
+    : `<span class="st-badge st-${task.status}">${STATUS_LABEL[task.status]||'Not started'}</span>`;
+
+  const dates = (task.startDate||task.dueDate)
+    ? `<span class="meta-dates">📅 ${task.startDate?fmtD(task.startDate):'…'} → ${task.dueDate?fmtD(task.dueDate):'no due date'}</span>` : '';
+  const od = ds ? `<span class="overdue-badge ${ds==='due-crit'?'badge-crit':'badge-warn'}">Overdue ${daysOverdue(task)}d</span>` : '';
+  const late = doneLate(task) ? `<span class="chip red">Done late</span>` : '';
+  const flag = own
+    ? `<button class="flag-btn ${task.needsResources?'on':''}" onclick="toggleResources(${pid},${tid});event.stopPropagation()" title="${task.needsResources?'Needs resources – click to clear':'Flag: needs more resources'}">🚩</button>`
+    : (task.needsResources ? `<span class="chip" title="${esc(task.resourceNote||'')}">🚩 Needs resources</span>` : '');
+  const subProg = subs.length ? `<span class="chip gray">${subDone}/${subs.length} sub-activities</span>` : '';
+  const reqChip = pendingReqFor(tid) ? `<span class="chip blue">⏳ change requested</span>` : '';
+
+  let details='';
   if (exp) {
-    const assigned=fmtDate(task.createdAt);
-    const done=task.completedAt?fmtDate(task.completedAt):null;
-    const dv=task.dueDate||'';
-    const badge=ds==='due-crit'
-      ?`<span class="overdue-badge badge-crit">Very overdue</span>`
-      :ds==='due-warn'?`<span class="overdue-badge badge-warn">Overdue</span>`:'';
-    datesHTML=`<div class="task-dates">
-      📅 Assigned: ${assigned}${done?`<br>✅ Completed: ${done}`:''}
-      <br><div class="due-row">📌 Due:&nbsp;<input type="date" class="due-input" value="${dv}"
-        onchange="setDueDate(${pid},${task.id},this.value)" onclick="event.stopPropagation()">
-        ${dv?`<button class="clear-due" onclick="clearDueDate(${pid},${task.id});event.stopPropagation()">×</button>`:''}
-        ${badge}</div></div>`;
+    details=`<div class="task-dates">
+      📅 Assigned: ${fmtDate(task.createdAt)}${task.createdBy&&task.createdBy!=='import'?` · by ${esc(task.createdBy)}`:''}
+      ${task.completedAt?`<br>✅ Completed: ${fmtDate(task.completedAt)}`:''}
+      ${task.needsResources?`<br>🚩 Needs resources${task.resourceNote?': '+esc(task.resourceNote):''}`:''}
+    </div>`;
   }
 
-  const content=isEdit
-    ?`<input id="edit-input-${task.id}" class="task-edit-input" value="${esc(task.text)}"
-        onblur="finishEdit(${pid},${task.id},this.value)"
-        onkeydown="handleEditKey(event,${pid},${task.id})"
-        onclick="event.stopPropagation();">`
-    :`<div class="task-content" onclick="toggleExpand(${task.id})">
-        <span class="task-text">${esc(task.text)}</span>${datesHTML}</div>`;
+  let actions='';
+  if (owner) {
+    actions=`
+      <button class="ta ${canUp?'':'invis'}" onclick="moveTask(${pid},${tid},'up')" title="Move up">↑</button>
+      <button class="ta ${canDown?'':'invis'}" onclick="moveTask(${pid},${tid},'down')" title="Move down">↓</button>
+      ${isSub?'':`<button class="ta" onclick="openTaskModal('add',${pid},${tid})" title="Add sub-activity">＋</button>`}
+      <button class="ta" onclick="openTaskModal('edit',${pid},null,${tid})" title="Edit">${EDIT_ICON}</button>
+      <button class="ta del" onclick="deleteTask(${pid},${tid})" title="Delete">✕</button>`;
+  } else if (isOwnList(p)) {
+    actions=`
+      ${isSub?'':`<button class="ta" onclick="openTaskModal('add',${pid},${tid})" title="Add sub-activity">＋</button>`}
+      <button class="ta" onclick="openTaskModal('edit',${pid},null,${tid})" title="Request a change">${EDIT_ICON}</button>
+      <button class="ta del" onclick="deleteTask(${pid},${tid})" title="Request deletion">✕</button>`;
+  }
 
-  return `<div class="task-item ${task.completed?'done':''} ${task.important?'imp-task':''} ${ds}" id="ti-${task.id}">
-    <button class="tick-btn" onclick="toggleTask(${pid},${task.id})" title="Toggle">✓</button>
-    <button class="star-btn ${task.important?'starred':''}" onclick="toggleImportant(${pid},${task.id})" title="Important">★</button>
-    ${content}
-    <div class="task-actions">
-      <button class="ta ${canUp?'':'invis'}" onclick="moveTask(${pid},${task.id},'up')" title="Move up">↑</button>
-      <button class="ta ${canDown?'':'invis'}" onclick="moveTask(${pid},${task.id},'down')" title="Move down">↓</button>
-      <button class="ta" onclick="startEdit(${pid},${task.id})" title="Edit">${EDIT_ICON}</button>
-      <button class="ta del" onclick="deleteTask(${pid},${task.id})" title="Delete">✕</button>
-    </div></div>`;
+  const star = owner
+    ? `<button class="star-btn ${task.important?'starred':''}" onclick="toggleImportant(${pid},${tid})" title="Important">★</button>`
+    : `<button class="star-btn ${task.important?'starred':''}" style="pointer-events:none;${task.important?'':'visibility:hidden'}" tabindex="-1">★</button>`;
+  const tick = own
+    ? `<button class="tick-btn" onclick="toggleTask(${pid},${tid})" title="${done?'Mark not done':'Mark done'}">✓</button>`
+    : `<button class="tick-btn" disabled title="Only ${esc(p.name)} or the owner can change this">✓</button>`;
+
+  const row=`<div class="task-item ${done?'done':''} ${task.important?'imp-task':''} ${ds} ${isSub?'sub-task':''}" id="ti-${tid}">
+    ${tick}${star}
+    <div class="task-content" onclick="toggleExpand(${tid})">
+      <span class="task-text">${esc(task.text)}</span>
+      <div class="task-meta">${statusCtl}${dates}${od}${late}${flag}${subProg}${reqChip}</div>
+      ${details}
+    </div>
+    <div class="task-actions">${actions}</div></div>`;
+
+  if (isSub || !subs.length) return row;
+  return row + `<div class="sub-wrap">${subs.map(s=>buildTask(p,s,subs.filter(x=>!isDone(x)),true)).join('')}</div>`;
 }
 
 /* ═══════════════════════════════════════════════════════
    BUILD: PENDING / COMPLETED
 ═══════════════════════════════════════════════════════ */
 function buildPending(mp) {
-  const imp=mp.tasks.filter(t=>!t.completed&&t.important);
-  const reg=mp.tasks.filter(t=>!t.completed&&!t.important);
-  if (!imp.length&&!reg.length) return `<div class="ec"><div class="ei">✅</div><div class="et">No pending tasks</div><div class="es">Hit + to add one</div></div>`;
+  const open=topTasks(mp).filter(t=>!isDone(t));
+  const imp=sortTasks(open.filter(t=>t.important)), reg=sortTasks(open.filter(t=>!t.important));
+  if (!imp.length&&!reg.length) return `<div class="ec"><div class="ei">✅</div><div class="et">No pending tasks</div><div class="es">${canAddTo(mp)?'Hit + to add one':'Nothing assigned yet'}</div></div>`;
   let html='';
   if (imp.length) { html+=`<div class="imp-label yellow">⭐ Important</div>`;
-    groupByDate(imp).forEach(({label,tasks})=>{html+=`<div class="date-label">${label}</div>`;tasks.forEach(t=>{html+=buildTask(mp.id,t,imp);});});
+    groupByDate(imp).forEach(({label,tasks})=>{html+=`<div class="date-label">${label}</div>`;tasks.forEach(t=>{html+=buildTask(mp,t,imp,false);});});
   }
   if (reg.length) { if(imp.length) html+=`<div class="imp-label gray">Tasks</div>`;
-    groupByDate(reg).forEach(({label,tasks})=>{html+=`<div class="date-label">${label}</div>`;tasks.forEach(t=>{html+=buildTask(mp.id,t,reg);});});
+    groupByDate(reg).forEach(({label,tasks})=>{html+=`<div class="date-label">${label}</div>`;tasks.forEach(t=>{html+=buildTask(mp,t,reg,false);});});
   }
   return html;
 }
 
-function buildCompleted(pid, done) {
+function buildCompleted(p) {
+  const done=sortTasks(topTasks(p).filter(isDone));
   if (!done.length) return '';
-  const rows=done.map(task=>{
-    const exp=expandedTasks.has(task.id);
-    const a=fmtDate(task.createdAt), c=task.completedAt?fmtDate(task.completedAt):null;
-    const dates=exp?`<div class="task-dates">📅 Assigned: ${a}${c?`<br>✅ Completed: ${c}`:''}</div>`:'';
-    return `<div class="task-item done" id="ti-${task.id}">
-      <button class="tick-btn" onclick="toggleTask(${pid},${task.id})" title="Undo">✓</button>
-      <div class="task-content" onclick="toggleExpand(${task.id})"><span class="task-text">${esc(task.text)}</span>${dates}</div>
-      <button class="ta del" onclick="deleteTask(${pid},${task.id})" title="Delete">✕</button></div>`;
-  }).join('');
+  const rows=done.map(t=>buildTask(p,t,done,false)).join('');
   return `<div class="completed-section ${completedOpen?'open':''}" id="completedSection">
     <div class="completed-header" onclick="toggleCompleted()">
       <span>✓ Completed &nbsp;(${done.length})</span><span class="caret">${completedOpen?'▲':'▼'}</span>
@@ -655,98 +850,85 @@ function buildCompleted(pid, done) {
 /* ═══════════════════════════════════════════════════════
    RENDER: MAIN PANEL
 ═══════════════════════════════════════════════════════ */
+function personHeaderBtns(p, stop) {
+  const s = stop ? ';event.stopPropagation();' : '';
+  const mailTip = p.email ? `📧 ${p.email}` : 'No email set – click to configure';
+  return `<button class="ph-btn owner-only" onclick="openEditPerson(${p.id})${s}" title="Edit person">${EDIT_ICON}</button>
+    <button class="ph-btn owner-only" onclick="emailPending(${p.id})${s}" title="${mailTip}" style="font-size:1rem;">✉</button>
+    ${canAddTo(p)?`<button class="ph-btn" onclick="openTaskModal('add',${p.id},null)${s}" title="Add task" style="font-size:1.2rem;line-height:1;">+</button>`:''}`;
+}
+function personSub(p) {
+  const {total,done,overdue}=taskStats(p);
+  return `${done} / ${total} completed${overdue?` · ⚠ ${overdue} overdue`:''}`;
+}
+
 function renderMain() {
-  const box=document.getElementById('mainContent');
-  if (!S.people.length) { box.innerHTML=`<div class="ec"><div class="ei">👥</div><div class="et">No team members yet</div><div class="es">Click "+ Add Person" to get started</div></div>`; return; }
+  const box=$('mainContent');
+  if (!S.people.length) { box.innerHTML=`<div class="ec"><div class="ei">👥</div><div class="et">No team members yet</div><div class="es">${isOwner()?'Click "+ Add Person" to get started':'Loading…'}</div></div>`; return; }
 
   const mp=focusedPerson();
   if (!mp) { renderHome(box); return; }
 
-  const av=avClass(mp), {total,done}=taskStats(mp), completed=mp.tasks.filter(t=>t.completed);
-  const mailTip=mp.email?`📧 ${mp.email}`:'No email set – click to configure';
-
   box.innerHTML=`
     <div class="focus-bar"><button class="back-btn" onclick="goHome()" title="Back to everyone">← Home</button></div>
     <div class="person-header">
-      <div class="person-avatar ${av}">${initials(mp.name)}</div>
+      <div class="person-avatar ${avClass(mp)}">${initials(mp.name)}</div>
       <div class="person-info">
         <div class="person-name">${esc(mp.name)}</div>
-        <div class="person-sub">${done} / ${total} tasks completed</div>
+        <div class="person-sub">${personSub(mp)}</div>
       </div>
-      <button class="ph-btn" onclick="openEditPerson(${mp.id})" title="Edit person">${EDIT_ICON}</button>
-      <button class="ph-btn" onclick="emailPending(${mp.id})" title="${mailTip}" style="font-size:1rem;">✉</button>
-      <button class="ph-btn" onclick="showTaskInput()" title="Add task" style="font-size:1.2rem;line-height:1;">+</button>
-    </div>
-    <div class="task-input-row" id="taskInputRow">
-      <input class="task-input" id="taskInput" placeholder="Describe the task…"
-             onkeydown="if(event.key==='Enter')confirmTask();if(event.key==='Escape')hideTaskInput();">
-      <button class="ib ib-green" onclick="confirmTask()" title="Add">✓</button>
-      <button class="ib ib-red"   onclick="hideTaskInput()" title="Cancel">✕</button>
+      ${personHeaderBtns(mp,false)}
     </div>
     <div class="tasks-area">
       <div class="pending-scroll">${buildPending(mp)}</div>
-      ${buildCompleted(mp.id, completed)}
+      ${buildCompleted(mp)}
     </div>`;
-
-  if (editingTaskId!==null) {
-    const inp=document.getElementById(`edit-input-${editingTaskId}`);
-    if (inp) { inp.focus(); inp.select(); }
-  }
 }
 
 function renderHome(box) {
   box.innerHTML=`<div class="home-scroll">${S.people.map(homeSectionHTML).join('')}</div>`;
-  if (editingTaskId!==null) {
-    const inp=document.getElementById(`edit-input-${editingTaskId}`);
-    if (inp) { inp.focus(); inp.select(); }
-  }
 }
 
 function homeSectionHTML(p) {
-  const av=avClass(p), {total,done}=taskStats(p), completed=p.tasks.filter(t=>t.completed);
-  const mailTip=p.email?`📧 ${p.email}`:'No email set – click to configure';
   return `<div class="home-section">
     <div class="person-header" onclick="selectPerson(${p.id})">
-      <div class="person-avatar ${av}">${initials(p.name)}</div>
+      <div class="person-avatar ${avClass(p)}">${initials(p.name)}</div>
       <div class="person-info">
         <div class="person-name">${esc(p.name)}</div>
-        <div class="person-sub">${done} / ${total} tasks completed</div>
+        <div class="person-sub">${personSub(p)}</div>
       </div>
-      <button class="ph-btn" onclick="openEditPerson(${p.id});event.stopPropagation();" title="Edit person">${EDIT_ICON}</button>
-      <button class="ph-btn" onclick="emailPending(${p.id});event.stopPropagation();" title="${mailTip}" style="font-size:1rem;">✉</button>
-      <button class="ph-btn" onclick="addTaskFor(${p.id});event.stopPropagation();" title="Add task" style="font-size:1.2rem;line-height:1;">+</button>
+      ${personHeaderBtns(p,true)}
     </div>
     <div class="home-tasks">
       ${buildPending(p)}
-      ${buildCompleted(p.id, completed)}
+      ${buildCompleted(p)}
     </div>
   </div>`;
 }
 
 function goHome()     { focusedId=null; renderMain(); renderStack(); }
-function addTaskFor(id) { selectPerson(id); showTaskInput(); }
 
 /* ═══════════════════════════════════════════════════════
    RENDER: STACK PANEL
 ═══════════════════════════════════════════════════════ */
 function renderStack() {
-  const scroll=document.getElementById('stackScroll'), label=document.getElementById('teamCountLabel');
+  const scroll=$('stackScroll'), label=$('teamCountLabel');
   label.textContent=`${S.people.length} member${S.people.length!==1?'s':''}`;
-  if (!S.people.length) { scroll.innerHTML=`<div class="ec" style="min-height:160px"><div class="ei">🧑‍💼</div><div class="et">No team members</div><div class="es">Add people to get started</div></div>`; return; }
+  if (!S.people.length) { scroll.innerHTML=`<div class="ec" style="min-height:160px"><div class="ei">🧑‍💼</div><div class="et">No team members</div><div class="es">${isOwner()?'Add people to get started':'Loading…'}</div></div>`; return; }
 
   scroll.innerHTML=S.people.map(person=>{
-    const av=avClass(person), {total,done,imp,pct}=taskStats(person);
-    const impBadge=imp?` · ⭐${imp}`:'';
+    const {total,done,imp,overdue,pct}=taskStats(person);
+    const extra=(imp?` · ⭐${imp}`:'')+(overdue?` · ⚠${overdue}`:'');
     const mailIcon=person.email?`<span style="color:#4f46e5;font-size:0.68rem;">✉</span>`:'';
     const active=person.id===focusedId?' active':'';
     return `<div class="person-card${active}" onclick="selectPerson(${person.id})">
       <div class="card-header">
-        <div class="card-avatar ${av}">${initials(person.name)}</div>
+        <div class="card-avatar ${avClass(person)}">${initials(person.name)}</div>
         <div class="card-info">
-          <div class="card-name">${esc(person.name)}</div>
-          <div class="card-sub"><span>${done}/${total} · ${pct}%${impBadge}</span>${mailIcon}</div>
+          <div class="card-name">${esc(person.name)}${isOwnList(person)?' (you)':''}</div>
+          <div class="card-sub"><span>${done}/${total} · ${pct}%${extra}</span>${mailIcon}</div>
         </div>
-        <button class="card-edit-btn" onclick="openEditPerson(${person.id});event.stopPropagation();" title="Edit person">${EDIT_ICON}</button>
+        <button class="card-edit-btn owner-only" onclick="openEditPerson(${person.id});event.stopPropagation();" title="Edit person">${EDIT_ICON}</button>
         <div class="card-chev">›</div>
       </div>
       <div class="card-bar-wrap"><div class="card-bar" style="width:${pct}%"></div></div>
@@ -755,65 +937,261 @@ function renderStack() {
 }
 
 function render() { renderMain(); renderStack(); save(); }
+function refreshOpenModals() { if (isOpen('assessOverlay')) renderAssessment(); }
 
-/* ═══════════════════════════════════════════════════════
-   ACTIONS: FOCUS A PERSON / RETURN HOME
-═══════════════════════════════════════════════════════ */
 function selectPerson(id) {
   focusedId = (focusedId===id) ? null : id;
   renderMain(); renderStack();
 }
 
 /* ═══════════════════════════════════════════════════════
-   ACTIONS: TASK INPUT
+   ACTIONS: STATUS / RESOURCES / PRIORITY / EXPAND / ORDER
 ═══════════════════════════════════════════════════════ */
-function showTaskInput() { const r=document.getElementById('taskInputRow'),i=document.getElementById('taskInput'); if(r){r.classList.add('visible');if(i)i.focus();} }
-function hideTaskInput() { const r=document.getElementById('taskInputRow'),i=document.getElementById('taskInput'); if(r)r.classList.remove('visible'); if(i)i.value=''; }
-function confirmTask() {
-  const inp=document.getElementById('taskInput'); if(!inp) return;
-  const text=inp.value.trim(); if(!text){inp.focus();return;}
-  const mp=focusedPerson(); if(!mp) return;
-  mp.tasks.push({id:newId(),text,completed:false,important:false,dueDate:null,createdAt:new Date().toISOString()});
-  hideTaskInput(); render();
-}
+function findTask(pid,tid) { const p=S.people.find(p=>p.id===pid); return { p, t: p && p.tasks.find(t=>t.id===tid) }; }
 
-/* ═══════════════════════════════════════════════════════
-   ACTIONS: TOGGLE / DELETE
-═══════════════════════════════════════════════════════ */
+function setStatus(pid,tid,val) {
+  const {p,t}=findTask(pid,tid); if(!t||!p||!canChangeStatus(p)||!STATUS_LABEL[val]) return;
+  if (t.status===val) return;
+  t.status=val;
+  t.completedAt = val==='done' ? new Date().toISOString() : null;
+  render();
+}
 function toggleTask(pid,tid) {
-  const p=S.people.find(p=>p.id===pid), t=p&&p.tasks.find(t=>t.id===tid); if(!t) return;
-  t.completed=!t.completed;
-  if(t.completed) t.completedAt=new Date().toISOString(); else delete t.completedAt;
-  expandedTasks.delete(tid); render();
+  const {t}=findTask(pid,tid); if(!t) return;
+  setStatus(pid,tid,isDone(t)?'todo':'done');
 }
-function deleteTask(pid,tid) {
-  const p=S.people.find(p=>p.id===pid); if(!p) return;
-  p.tasks=p.tasks.filter(t=>t.id!==tid); expandedTasks.delete(tid);
-  if(editingTaskId===tid) editingTaskId=null; render();
+async function toggleResources(pid,tid) {
+  const {p,t}=findTask(pid,tid); if(!t||!p||!canChangeStatus(p)) return;
+  if (t.needsResources) { t.needsResources=false; t.resourceNote=''; render(); return; }
+  const note=await askText({title:'🚩 Needs more resources',label:'What do you need? (people, tools, budget, time…)',ok:'Flag it',min:3});
+  if (note===null) return;
+  t.needsResources=true; t.resourceNote=note; render();
 }
-
-/* ═══════════════════════════════════════════════════════
-   ACTIONS: IMPORTANT / EXPAND / EDIT / MOVE / DUE DATE
-═══════════════════════════════════════════════════════ */
-function toggleImportant(pid,tid) { const p=S.people.find(p=>p.id===pid),t=p&&p.tasks.find(t=>t.id===tid); if(t){t.important=!t.important;render();} }
+function toggleImportant(pid,tid) { const {t}=findTask(pid,tid); if(t&&isOwner()){t.important=!t.important;render();} }
 function toggleExpand(tid) { expandedTasks.has(tid)?expandedTasks.delete(tid):expandedTasks.add(tid); renderMain(); }
-function startEdit(pid,tid) { editingTaskId=tid; renderMain(); }
-function handleEditKey(e,pid,tid) { if(e.key==='Enter'){e.preventDefault();finishEdit(pid,tid,e.target.value);}if(e.key==='Escape'){editingTaskId=null;renderMain();} }
-function finishEdit(pid,tid,value) { const p=S.people.find(p=>p.id===pid),t=p&&p.tasks.find(t=>t.id===tid); if(t){const v=value.trim();if(v)t.text=v;} editingTaskId=null; render(); }
+
 function moveTask(pid,tid,dir) {
-  const p=S.people.find(p=>p.id===pid); if(!p) return;
-  const task=p.tasks.find(t=>t.id===tid); if(!task||task.completed) return;
-  const grp=task.important?p.tasks.filter(t=>!t.completed&&t.important):p.tasks.filter(t=>!t.completed&&!t.important);
-  const gi=grp.indexOf(task), sw=dir==='up'?(gi>0?grp[gi-1]:null):(gi<grp.length-1?grp[gi+1]:null);
-  if(!sw) return; const ai=p.tasks.indexOf(task),bi=p.tasks.indexOf(sw);
-  [p.tasks[ai],p.tasks[bi]]=[p.tasks[bi],p.tasks[ai]]; render();
+  if(!isOwner()) return;
+  const {p,t:task}=findTask(pid,tid); if(!task) return;
+  const sibs=sortTasks(p.tasks.filter(x=>(x.parentId||null)===(task.parentId||null)&&!isDone(x)&&(task.parentId?true:!!x.important===!!task.important)));
+  const gi=sibs.indexOf(task), other=dir==='up'?sibs[gi-1]:sibs[gi+1];
+  if(!other) return;
+  if ((task.order||0)===(other.order||0)) sibs.forEach((x,i)=>x.order=(i+1)*1000);   // make orders distinct
+  const a=task.order, b=other.order; task.order=b; other.order=a;
+  render();
 }
-function setDueDate(pid,tid,val) { const p=S.people.find(p=>p.id===pid),t=p&&p.tasks.find(t=>t.id===tid); if(t){t.dueDate=val||null;save();renderMain();} }
-function clearDueDate(pid,tid) { const p=S.people.find(p=>p.id===pid),t=p&&p.tasks.find(t=>t.id===tid); if(t){t.dueDate=null;render();} }
 function toggleCompleted() {
   completedOpen=!completedOpen;
-  const sec=document.getElementById('completedSection');
+  const sec=$('completedSection');
   if(sec){sec.classList.toggle('open',completedOpen);const c=sec.querySelector('.caret');if(c)c.textContent=completedOpen?'▲':'▼';}
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODAL: ASK FOR TEXT (reasons, notes) → Promise
+═══════════════════════════════════════════════════════ */
+let _askResolve=null, _askMin=0;
+function askText(o) {
+  return new Promise(res=>{
+    _askResolve=res; _askMin=o.min||0;
+    $('txTitle').textContent=o.title||''; $('txLabel').textContent=o.label||'';
+    $('txInput').value=o.value||''; $('txInput').placeholder=o.placeholder||'';
+    $('txOk').textContent=o.ok||'OK';
+    $('askOverlay').style.display='flex'; setTimeout(()=>$('txInput').focus(),40);
+  });
+}
+function closeAsk(val) {
+  $('askOverlay').style.display='none';
+  const r=_askResolve; _askResolve=null; if(r) r(val);
+}
+function submitAsk() {
+  const v=$('txInput').value.trim();
+  if (v.length<_askMin) { showToast(`⚠ Please write at least ${_askMin} characters`); return; }
+  closeAsk(v);
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODAL: ADD / EDIT TASK
+   owner: applies directly · member editing: sends a request
+═══════════════════════════════════════════════════════ */
+let _tm=null;
+function openTaskModal(mode,pid,parentId,taskId) {
+  const p=S.people.find(x=>x.id===pid); if(!p) return;
+  if (mode==='add' && !canAddTo(p)) { showToast('You can only add tasks to your own list'); return; }
+  let t=null;
+  if (mode==='edit') { t=p.tasks.find(x=>x.id===taskId); if(!t) return; }
+  _tm={mode,pid,parentId:parentId||null,taskId:taskId||null};
+  const parent = mode==='add' && parentId ? p.tasks.find(x=>x.id===parentId) : null;
+
+  $('tmHeading').textContent = mode==='add' ? (parent?'＋ Add sub-activity':'＋ Add task') : (isOwner()?'✎ Edit task':'✎ Request a change');
+  $('tmContext').textContent = parent ? `Under: ${parent.text}` + (parent.dueDate?` (due ${fmtD(parent.dueDate)})`:'') : `For: ${p.name}`;
+  $('tmText').value = t?t.text:''; $('tmStart').value = t&&t.startDate?t.startDate:''; $('tmDue').value = t&&t.dueDate?t.dueDate:'';
+  $('tmImp').checked = t?!!t.important:false;
+  const memberEdit = mode==='edit' && !isOwner();
+  $('tmReasonWrap').style.display = memberEdit?'block':'none'; $('tmReason').value='';
+  $('tmHint').textContent = memberEdit ? 'Changes are not applied until the owner approves your request.' : '';
+  $('tmOk').textContent = mode==='add' ? 'Add' : (isOwner()?'Save':'Send request');
+  $('taskOverlay').style.display='flex'; setTimeout(()=>{ $('tmText').focus(); },40);
+}
+function closeTaskModal() { $('taskOverlay').style.display='none'; _tm=null; }
+
+function submitTaskModal() {
+  if(!_tm) return;
+  const text=$('tmText').value.trim(); if(!text){ $('tmText').focus(); return; }
+  const start=$('tmStart').value||null, due=$('tmDue').value||null, imp=$('tmImp').checked;
+  if (start&&due&&due<start) { showToast('⚠ Due date is before the start date'); return; }
+  const p=S.people.find(x=>x.id===_tm.pid); if(!p) return;
+
+  if (_tm.mode==='add') {
+    if (!canAddTo(p)) return;
+    p.tasks.push({id:newId(),personId:p.id,parentId:_tm.parentId,text,status:'todo',important:imp,startDate:start,dueDate:due,
+      createdAt:new Date().toISOString(),completedAt:null,createdBy:ME.email,needsResources:false,resourceNote:'',order:Date.now()});
+    if (_tm.parentId) expandedTasks.delete(_tm.parentId);
+    closeTaskModal(); render(); return;
+  }
+
+  const t=p.tasks.find(x=>x.id===_tm.taskId); if(!t) return;
+  const prop={};
+  if (text!==t.text) prop.text=text;
+  if ((start||null)!==(t.startDate||null)) prop.startDate=start;
+  if ((due||null)!==(t.dueDate||null)) prop.dueDate=due;
+  if (imp!==!!t.important) prop.important=imp;
+  if (!Object.keys(prop).length) { closeTaskModal(); showToast('No changes to save'); return; }
+
+  if (isOwner()) { Object.assign(t,prop); closeTaskModal(); render(); showToast('✅ Task updated'); return; }
+  const reason=$('tmReason').value.trim();
+  if (reason.length<3) { showToast('⚠ Please give a reason for the change'); $('tmReason').focus(); return; }
+  submitRequest({type:'edit',taskId:t.id,personId:p.id,taskText:t.text,reason,proposed:prop});
+  closeTaskModal();
+}
+
+/* ═══════════════════════════════════════════════════════
+   ACTIONS: DELETE  (owner deletes · member sends a request)
+═══════════════════════════════════════════════════════ */
+function removeTaskTree(p,tid) {
+  const ids=[tid,...p.tasks.filter(x=>x.parentId===tid).map(x=>x.id)];
+  p.tasks=p.tasks.filter(x=>!ids.includes(x.id));
+  ids.forEach(id=>{DELETED.add(id); expandedTasks.delete(id);});
+}
+async function deleteTask(pid,tid) {
+  const {p,t}=findTask(pid,tid); if(!t) return;
+  if (isOwner()) {
+    const n=p.tasks.filter(x=>x.parentId===tid).length;
+    if (!confirm(`Delete "${t.text}"${n?` and its ${n} sub-activit${n>1?'ies':'y'}`:''}?`)) return;
+    removeTaskTree(p,tid); render(); return;
+  }
+  if (!isOwnList(p)) return;
+  const reason=await askText({title:'Request deletion',label:`Why should "${t.text}" be deleted?`,placeholder:'Reason…',ok:'Send request',min:3});
+  if (reason) submitRequest({type:'delete',taskId:tid,personId:pid,taskText:t.text,reason,proposed:{}});
+}
+
+/* ═══════════════════════════════════════════════════════
+   REQUESTS
+═══════════════════════════════════════════════════════ */
+async function submitRequest(r) {
+  const req={id:newId(),taskId:r.taskId,personId:r.personId,taskText:r.taskText,type:r.type,reason:r.reason,proposed:r.proposed||{},
+    status:'pending',createdBy:ME.email,createdAt:new Date().toISOString(),resolvedAt:null,resolvedBy:null,ownerNote:''};
+  try { await window.fbCreateRequest(req); showToast('📨 Request sent to the owner'); }
+  catch(e) { console.error(e); showToast('⚠ Could not send request ('+(e.code||e.message)+')'); }
+}
+function updateReqBadge() {
+  const b=$('rqBadge'); if(!b) return;
+  const n=isOwner()?REQS.filter(r=>r.status==='pending').length:0;
+  b.textContent=n; b.style.display=n?'inline':'none';
+}
+function personName(id) { const p=S.people.find(x=>x.id===id); return p?p.name:'?'; }
+function proposedLines(r) {
+  const {t}=findTask(r.personId,r.taskId), pr=r.proposed||{}, out=[];
+  if ('text' in pr)      out.push(`Title: “${esc(t?t.text:r.taskText)}” → “${esc(pr.text)}”`);
+  if ('startDate' in pr) out.push(`Start: ${t&&t.startDate?fmtD(t.startDate):'none'} → ${pr.startDate?fmtD(pr.startDate):'none'}`);
+  if ('dueDate' in pr)   out.push(`Due: ${t&&t.dueDate?fmtD(t.dueDate):'none'} → ${pr.dueDate?fmtD(pr.dueDate):'none'}`);
+  if ('important' in pr) out.push(`Important: ${pr.important?'yes':'no'}`);
+  return out;
+}
+function renderRequests() {
+  const list=REQS.slice().sort((a,b)=>((a.status==='pending'?0:1)-(b.status==='pending'?0:1))||String(b.createdAt).localeCompare(String(a.createdAt)));
+  $('rqTitle').firstChild.textContent = isOwner()?'📥 Requests ':'📥 My requests ';
+  if (!list.length) { $('reqBody').innerHTML=`<div class="ec"><div class="ei">📭</div><div class="et">No requests</div><div class="es">${isOwner()?'Team members can ask you to change or delete their tasks.':'To change or delete a task, use ✎ or ✕ on it and give a reason.'}</div></div>`; return; }
+  $('reqBody').innerHTML=list.map(r=>{
+    const pend=r.status==='pending';
+    const stChip=pend?'<span class="chip">Pending</span>':r.status==='approved'?'<span class="chip" style="background:#d1fae5;color:#065f46">Approved</span>':'<span class="chip red">Rejected</span>';
+    const props=proposedLines(r).map(l=>`<div class="req-prop">${l}</div>`).join('');
+    return `<div class="req-card ${pend?'pending':''}">
+      <div class="req-top">${stChip}<b>${r.type==='delete'?'🗑 Delete request':'✎ Change request'}</b>
+        <span style="color:#6b7280">${esc(personName(r.personId))} · ${esc(r.createdBy)} · ${fmtDateShort(r.createdAt)}</span></div>
+      <div class="req-task">${esc(r.taskText)}</div>
+      ${props}
+      <div class="req-reason">${esc(r.reason)}</div>
+      ${r.ownerNote?`<div class="req-prop"><b>Owner's note:</b> ${esc(r.ownerNote)}</div>`:''}
+      ${pend&&isOwner()?`<div class="req-actions">
+        <button class="btn btn-green" onclick="approveRequest(${r.id})">Approve &amp; apply</button>
+        <button class="btn btn-red" onclick="rejectRequest(${r.id})">Reject</button></div>`:''}
+    </div>`;
+  }).join('');
+}
+function openRequests()  { renderRequests(); $('reqOverlay').style.display='flex'; }
+function closeRequests() { $('reqOverlay').style.display='none'; }
+
+async function resolveRequest(r,status,note) {
+  try {
+    await window.fbResolveRequest(r.id,{status,ownerNote:note||'',resolvedAt:new Date().toISOString(),resolvedBy:ME.email});
+    showToast(status==='approved'?'✅ Request approved':'Request rejected');
+  } catch(e) { console.error(e); showToast('⚠ Could not update request ('+(e.code||e.message)+')'); }
+}
+async function approveRequest(id) {
+  const r=REQS.find(x=>x.id===id); if(!r||r.status!=='pending'||!isOwner()) return;
+  const {p,t}=findTask(r.personId,r.taskId);
+  if (t) {
+    if (r.type==='delete') removeTaskTree(p,t.id);
+    else ['text','startDate','dueDate','important'].forEach(k=>{ if(k in (r.proposed||{})) t[k]=r.proposed[k]; });
+    render();
+  }
+  await resolveRequest(r,'approved','');
+}
+async function rejectRequest(id) {
+  const r=REQS.find(x=>x.id===id); if(!r||r.status!=='pending'||!isOwner()) return;
+  const note=await askText({title:'Reject request',label:'Note for the team member (optional)',ok:'Reject'});
+  if (note===null) return;
+  await resolveRequest(r,'rejected',note);
+}
+
+/* ═══════════════════════════════════════════════════════
+   ASSESSMENT
+═══════════════════════════════════════════════════════ */
+function openAssessment()  { renderAssessment(); $('assessOverlay').style.display='flex'; }
+function closeAssessment() { $('assessOverlay').style.display='none'; }
+function renderAssessment() {
+  const rows=S.people.map(p=>{
+    const t=p.tasks;
+    const done=t.filter(isDone).length, on=t.filter(doneOnTime).length, late=t.filter(doneLate).length;
+    return {p, items:t.length, done, on, late, overdue:t.filter(isOverdue).length,
+      blocked:t.filter(x=>x.status==='blocked').length, needs:t.filter(x=>x.needsResources&&!isDone(x)).length,
+      pct:(on+late)?Math.round(on/(on+late)*100):null};
+  });
+  const sum=k=>rows.reduce((a,r)=>a+r[k],0);
+  const tOn=sum('on'), tLate=sum('late');
+  const pctTxt=r=>r.pct===null?'—':`<span class="${r.pct>=80?'good':r.pct<50?'bad':''}">${r.pct}%</span>`;
+  const num=(v,bad)=>v?(bad?`<span class="bad">${v}</span>`:v):'<span style="color:#d1d5db">0</span>';
+
+  let html=`<table class="asm"><thead><tr><th>Person</th><th>Items</th><th>Done</th><th>On time</th><th>Late</th><th>On-time %</th><th>Overdue</th><th>Blocked</th><th>Needs resources</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr><td>${esc(r.p.name)}</td><td>${r.items}</td><td>${r.done}</td><td>${r.on}</td><td>${num(r.late,true)}</td><td>${pctTxt(r)}</td><td>${num(r.overdue,true)}</td><td>${num(r.blocked,true)}</td><td>${num(r.needs,true)}</td></tr>`).join('')+
+    `<tr class="total"><td>Team</td><td>${sum('items')}</td><td>${sum('done')}</td><td>${tOn}</td><td>${sum('late')}</td><td>${(tOn+tLate)?Math.round(tOn/(tOn+tLate)*100)+'%':'—'}</td><td>${sum('overdue')}</td><td>${sum('blocked')}</td><td>${sum('needs')}</td></tr></tbody></table>`;
+
+  const att=[];
+  S.people.forEach(p=>p.tasks.forEach(t=>{
+    if (isDone(t)) return;
+    const why=[];
+    if (isOverdue(t)) why.push(`<span class="chip red">Overdue ${daysOverdue(t)}d</span>`);
+    if (t.status==='blocked') why.push(`<span class="chip red">Blocked</span>`);
+    if (t.needsResources) why.push(`<span class="chip">🚩 Needs resources${t.resourceNote?': '+esc(t.resourceNote):''}</span>`);
+    if (why.length) att.push({p,t,why,score:(isOverdue(t)?daysOverdue(t):0)+(t.status==='blocked'?1:0)+(t.needsResources?1:0)});
+  }));
+  att.sort((a,b)=>b.score-a.score);
+  html+=`<div class="asm-sec">Needs attention (${att.length})</div>`+
+    (att.length?att.map(a=>`<div class="att-row"><div class="who">${esc(a.p.name)}</div>
+      <div class="what">${esc(a.t.text)}${a.t.parentId?' <span style="color:#9ca3af">(sub-activity)</span>':''}<div class="task-meta">${a.why.join('')}${a.t.dueDate?`<span class="meta-dates">due ${fmtD(a.t.dueDate)}</span>`:''}</div></div></div>`).join('')
+      :`<div class="modal-hint">Nothing is overdue, blocked or waiting for resources. 🎉</div>`);
+  html+=`<div class="legend"><b>Items</b> = tasks and sub-activities. <b>On time</b> = completed on or before the due date; <b>Late</b> = completed after it. On-time % only counts completed items that have a due date.</div>`;
+  $('assessBody').innerHTML=html;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -901,55 +1279,48 @@ function confirmEditPerson() {
   closeEditPerson(); render(); showToast('✅ Person updated');
 }
 
+
 /* ═══════════════════════════════════════════════════════
-   EMAIL: SEND (direct mailto — no preview modal)
+   EMAIL: SEND (owner only, via the local email bridge)
 ═══════════════════════════════════════════════════════ */
 async function emailPending(pid) {
-  const person=S.people.find(p=>p.id===pid); if(!person) return;
+  const person=S.people.find(p=>p.id===pid); if(!person||!isOwner()) return;
 
   if (!person.email) {
     showToast('Add an email via Edit Person (✏ icon) first');
     openEditPerson(pid); return;
   }
 
-  const pending=[
-    ...person.tasks.filter(t=>!t.completed&&t.important),
-    ...person.tasks.filter(t=>!t.completed&&!t.important),
-  ];
-
+  const pending=sortTasks(person.tasks.filter(t=>!isDone(t)));
   if (!pending.length) { showToast('✅ No pending tasks for '+person.name); return; }
 
   const subject=`Pending Tasks – ${person.name}`;
   const lines=pending.map((t,i)=>{
     const star=t.important?'[IMPORTANT] ':'';
-    const due=t.dueDate?` | Due: ${fmtDateShort(t.dueDate)}`:'';
-    const dt=t.createdAt?` (assigned ${new Date(t.createdAt).toLocaleDateString()})`:'';;
-    const ds=dueStatus(t);
-    const flag=ds==='due-crit'?' ⚠ VERY OVERDUE':ds==='due-warn'?' ⚠ OVERDUE':'';
-    return `${i+1}. ${star}${t.text}${dt}${due}${flag}`;
+    const sub=t.parentId?'   ↳ ':'';
+    const st=` [${STATUS_LABEL[t.status]||'Not started'}]`;
+    const due=t.dueDate?` | Due: ${fmtD(t.dueDate)}`:'';
+    const flag=isOverdue(t)?` ⚠ OVERDUE ${daysOverdue(t)}d`:'';
+    const res=t.needsResources?' 🚩 needs resources':'';
+    return `${i+1}. ${sub}${star}${t.text}${st}${due}${flag}${res}`;
   });
 
   const body=[`Hi,`,``,`Pending tasks for ${person.name}:`,``,...lines,``,
-    `Total: ${pending.length} pending task${pending.length!==1?'s':''}.`,``,`— Work Tracking Dashboard`].join('\n');
+    `Total: ${pending.length} pending item${pending.length!==1?'s':''}.`,``,`— Work Tracking Dashboard`].join('\n');
 
-  // ── Try direct SMTP via local email bridge ──────────
   showToast('📧 Sending…', 8000);
   try {
-    const res = await fetch('http://localhost:5757/send', {
+    const res = await fetch(SERVER_URL + '/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ to: person.email, subject, body }),
       signal: AbortSignal.timeout(12000)
     });
     const result = await res.json();
-    if (result.ok) {
-      showToast('✅ Email sent to ' + person.email, 3500);
-    } else {
-      showToast('❌ ' + (result.error || 'Send failed'), 5000);
-    }
+    if (result.ok) showToast('✅ Email sent to ' + person.email, 3500);
+    else showToast('❌ ' + (result.error || 'Send failed'), 5000);
   } catch(e) {
-    // Bridge not running — fall back to mailto
-    showToast('⚠️ Email bridge offline. Start start_email_server.bat first.', 5000);
+    showToast('⚠️ Email bridge offline. Start start_email_server.bat first (works on your own PC only).', 5000);
   }
 }
 
@@ -959,28 +1330,24 @@ async function emailPending(pid) {
 function downloadExcel() {
   if (typeof XLSX==='undefined'){showToast('⚠️ Excel library not loaded');return;}
   const wb=XLSX.utils.book_new();
-  const allRows=[['Person','Email','Task','Important','Status','Due Date','Assigned','Completed At']];
-  S.people.forEach(p=>{
-    p.tasks.forEach(t=>{
-      allRows.push([p.name,p.email||'',t.text,t.important?'Yes':'',t.completed?'Done':'Pending',
-        t.dueDate?new Date(t.dueDate).toLocaleDateString():'',
-        t.createdAt?new Date(t.createdAt).toLocaleString():'',
-        t.completedAt?new Date(t.completedAt).toLocaleString():'']);
-    });
-  });
-  const wsAll=XLSX.utils.aoa_to_sheet(allRows);
-  wsAll['!cols']=[{wch:18},{wch:28},{wch:38},{wch:10},{wch:10},{wch:14},{wch:20},{wch:20}];
+  const head=['Person','Task','Sub-activity of','Status','Important','Start','Due','On time?','Needs resources','Resource note','Assigned','Completed At','Created by'];
+  const rowFor=(p,t)=>{
+    const parent=t.parentId?(p.tasks.find(x=>x.id===t.parentId)||{}).text||'':'';
+    const ot=doneOnTime(t)?'Yes':doneLate(t)?'Late':isOverdue(t)?'Overdue':'';
+    return [p.name,t.text,parent,STATUS_LABEL[t.status]||'',t.important?'Yes':'',
+      t.startDate?fmtD(t.startDate):'',t.dueDate?fmtD(t.dueDate):'',ot,t.needsResources?'Yes':'',t.resourceNote||'',
+      t.createdAt?new Date(t.createdAt).toLocaleString():'',t.completedAt?new Date(t.completedAt).toLocaleString():'',t.createdBy||''];
+  };
+  const widths=[{wch:18},{wch:38},{wch:26},{wch:12},{wch:9},{wch:13},{wch:13},{wch:9},{wch:10},{wch:26},{wch:20},{wch:20},{wch:26}];
+  const all=[head];
+  S.people.forEach(p=>sortTasks(p.tasks).forEach(t=>all.push(rowFor(p,t))));
+  const wsAll=XLSX.utils.aoa_to_sheet(all); wsAll['!cols']=widths;
   XLSX.utils.book_append_sheet(wb,wsAll,'All Tasks');
   S.people.forEach(p=>{
     if(!p.tasks.length) return;
-    const rows=[['Task','Important','Status','Due Date','Assigned','Completed At']];
-    p.tasks.forEach(t=>rows.push([t.text,t.important?'Yes':'',t.completed?'Done':'Pending',
-      t.dueDate?new Date(t.dueDate).toLocaleDateString():'',
-      t.createdAt?new Date(t.createdAt).toLocaleString():'',
-      t.completedAt?new Date(t.completedAt).toLocaleString():'']));
-    const ws=XLSX.utils.aoa_to_sheet(rows);
-    ws['!cols']=[{wch:38},{wch:10},{wch:10},{wch:14},{wch:20},{wch:20}];
-    XLSX.utils.book_append_sheet(wb,ws,p.name.slice(0,31));
+    const rows=[head.slice(1)]; sortTasks(p.tasks).forEach(t=>rows.push(rowFor(p,t).slice(1)));
+    const ws=XLSX.utils.aoa_to_sheet(rows); ws['!cols']=widths.slice(1);
+    XLSX.utils.book_append_sheet(wb,ws,p.name.replace(/[\\\/?*\[\]:]/g,' ').slice(0,31));
   });
   XLSX.writeFile(wb,`Work_Tracking_${new Date().toISOString().slice(0,10)}.xlsx`);
   showToast('✅ Excel file downloaded');
@@ -997,7 +1364,7 @@ renderMain(); renderStack();
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, collection, doc, onSnapshot, writeBatch }
+import { getFirestore, collection, doc, onSnapshot, writeBatch, setDoc, updateDoc, query, where }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -1009,104 +1376,212 @@ const firebaseConfig = {
   appId: "1:240617363261:web:f9cb8378f1d7ba595b1754"
 };
 
-// Only these accounts may seed the very first data (the security rules decide who can read/write).
+// Owners have full control. Must match the list in firestore.rules.
 const OWNERS = ['mohammad.irfan@takachar.com', 'irfan0618@gmail.com'];
+// Created once (by an owner) in the "users" collection: who is a member, and which person they are.
+const SEED_USERS = [
+  { email: 'mohammad.irfan@takachar.com', role: 'owner',  person: 'Mohammad Irfan' },
+  { email: 'irfan0618@gmail.com',         role: 'owner',  person: 'Mohammad Irfan' },
+  { email: 'nawedul.hasan@takachar.com',  role: 'member', person: 'Nawedul Hasan' },
+  { email: 'hasannawedul636@gmail.com',   role: 'member', person: 'Nawedul Hasan' }
+];
+const STATUS_OK = ['todo', 'doing', 'blocked', 'done'];
 
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 const peopleCol = collection(db, 'people');
+const tasksCol  = collection(db, 'tasks');
+const reqCol    = collection(db, 'requests');
+const usersCol  = collection(db, 'users');
 const $ = id => document.getElementById(id);
 
-let currentUser = null;
-let unsub = null;
-let latestRemote = null;
-let seeding = false;
-const lastSynced = new Map();   // person id -> canonical JSON last known on the server
+let currentUser = null, isOwnerUser = false;
+let unsubs = [];
+let peopleRaw = [], tasksRaw = [], usersMap = new Map();
+let gotPeople = false, gotTasks = false, gotUsers = false;
+let latestRemote = null, migrating = false, seededUsers = false;
+const applied = new Map();   // doc key -> canonical JSON of what this browser last saw/wrote
 
-// Stable JSON (sorted keys) so key order never causes false "changes".
+/* ── normalisation ── */
 function canon(v) {
   if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']';
   if (v && typeof v === 'object') return '{' + Object.keys(v).sort().map(k => JSON.stringify(k) + ':' + canon(v[k])).join(',') + '}';
   return JSON.stringify(v === undefined ? null : v);
 }
-function clean(p, idx) {
+function cleanTask(t, pid) {
   return JSON.parse(JSON.stringify({
-    id: p.id, name: p.name, email: p.email || '', tasks: p.tasks || [],
-    order: (p.order !== undefined ? p.order : idx)
+    id: t.id, personId: (t.personId !== undefined ? t.personId : pid), parentId: t.parentId ?? null,
+    text: t.text || '', status: STATUS_OK.includes(t.status) ? t.status : 'todo',
+    important: !!t.important, startDate: t.startDate ?? null, dueDate: t.dueDate ?? null,
+    createdAt: t.createdAt ?? null, completedAt: t.completedAt ?? null, createdBy: t.createdBy ?? '',
+    needsResources: !!t.needsResources, resourceNote: t.resourceNote || '', order: t.order ?? 0
   }));
 }
+function cleanPerson(p, idx) {
+  return JSON.parse(JSON.stringify({ id: p.id, name: p.name, email: p.email || '', order: (p.order !== undefined ? p.order : idx) }));
+}
+function normPeople(list) {
+  return list.map((p, i) => ({ ...cleanPerson(p, i), tasks: (p.tasks || []).map(t => cleanTask(t, p.id)).sort((a, b) => a.order - b.order) }));
+}
+function markApplied(list) {
+  applied.clear();
+  list.forEach((p, i) => {
+    applied.set('p:' + p.id, canon(cleanPerson(p, i)));
+    p.tasks.forEach(t => applied.set('t:' + t.id, canon(cleanTask(t, p.id))));
+  });
+}
 
-/* ── write only the people that changed ── */
-window.fbPush = async function (people) {
-  if (!currentUser) return;
+/* ── write only what changed (deletes are explicit) ── */
+async function commitOps(ops) {
+  for (let i = 0; i < ops.length; i += 400) {
+    const batch = writeBatch(db);
+    ops.slice(i, i + 400).forEach(o => o.del ? batch.delete(o.ref) : batch.set(o.ref, o.data));
+    await batch.commit();
+  }
+}
+window.fbPush = async function (people, deletedIds) {
+  if (!currentUser) return false;
   try {
-    const batch = writeBatch(db), pending = new Map();
+    const ops = [], pending = new Map();
     people.forEach((p, i) => {
-      const data = clean(p, i), j = canon(data), key = String(data.id);
-      if (lastSynced.get(key) !== j) { batch.set(doc(peopleCol, key), data); pending.set(key, j); }
+      if (isOwnerUser) {
+        const d = cleanPerson(p, i), j = canon(d), k = 'p:' + d.id;
+        if (applied.get(k) !== j) { ops.push({ ref: doc(peopleCol, String(d.id)), data: d }); pending.set(k, j); }
+      }
+      p.tasks.forEach(t => {
+        const d = cleanTask(t, p.id), j = canon(d), k = 't:' + d.id;
+        if (applied.get(k) !== j) { ops.push({ ref: doc(tasksCol, String(d.id)), data: d }); pending.set(k, j); }
+      });
     });
-    if (pending.size) {
-      await batch.commit();
-      pending.forEach((j, k) => lastSynced.set(k, j));
-    }
+    (deletedIds || []).forEach(id => ops.push({ ref: doc(tasksCol, String(id)), del: true }));
+    if (ops.length) await commitOps(ops);
+    pending.forEach((j, k) => applied.set(k, j));
+    (deletedIds || []).forEach(id => applied.delete('t:' + id));
     setSyncStatus(true);
+    return true;
   } catch (e) {
     console.error(e);
     setSyncStatus(false, 'Save failed: ' + (e.code || e.message));
     showToast('⚠ Could not save changes (' + (e.code || 'error') + ')');
+    return false;
   }
 };
+window.fbCreateRequest  = req => setDoc(doc(reqCol, String(req.id)), req);
+window.fbResolveRequest = (id, patch) => updateDoc(doc(reqCol, String(id)), patch);
 
 /* ── show remote data, but never while you are typing or have an unsent change ── */
 function applyLatest() {
   if (!latestRemote) return;
   const a = document.activeElement;
-  const typing = a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA') && !$('loginOverlay').contains(a);
+  const typing = a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT') && !$('loginOverlay').contains(a);
   if (hasPendingSave() || typing) { setTimeout(applyLatest, 1000); return; }
   const people = latestRemote; latestRemote = null;
-  if (canon(people.map((p, i) => clean(p, i))) === canon(S.people.map((p, i) => clean(p, i)))) return;
-  applyRemotePeople(people);
+  const same = canon(normPeople(people)) === canon(normPeople(S.people));
+  markApplied(people);
+  if (!same) applyRemotePeople(people);
+}
+function assemble() {
+  if (!gotPeople || !gotTasks) return;
+  const byPerson = new Map();
+  tasksRaw.forEach(t => { const c = cleanTask(t); if (!byPerson.has(c.personId)) byPerson.set(c.personId, []); byPerson.get(c.personId).push(c); });
+  const people = peopleRaw.map((p, i) => ({ ...cleanPerson(p, i), tasks: (byPerson.get(p.id) || []).sort((a, b) => a.order - b.order) }))
+                          .sort((a, b) => a.order - b.order);
+  latestRemote = people;
+  applyLatest();
 }
 
-async function seedFromDataJson() {
-  if (seeding) return; seeding = true;
+/* ── role of the signed-in user ── */
+function pushMe() {
+  const email = (currentUser.email || '').toLowerCase();
+  const u = usersMap.get(email);
+  let role = null, personId = null;
+  if (isOwnerUser) { role = 'owner'; personId = u ? u.personId : null; }
+  else if (u) { role = u.role === 'member' ? 'member' : null; personId = u.personId ?? null; }
+  setMe({ email, role, personId });
+  if (!isOwnerUser && !u && gotUsers) showToast('⛔ Your account is not set up yet. Ask the owner to add you.', 6000);
+}
+
+/* ── one-time upgrade: tasks used to live inside each person; move them into their own records ── */
+async function migrateLegacy(docs) {
+  if (migrating) return;
+  const legacy = docs.filter(d => Array.isArray(d.data().tasks) && d.data().tasks.length);
+  if (!legacy.length) return;
+  migrating = true;
   try {
-    const res = await fetch('data.json', { cache: 'no-store' });
-    if (!res.ok) return;
-    const data = await res.json();
-    const people = (data.people || []).map((p, i) => clean(p, i));
-    if (!people.length) return;
-    const batch = writeBatch(db);
-    people.forEach(p => batch.set(doc(peopleCol, String(p.id)), p));
-    await batch.commit();
-    showToast('✅ Imported ' + people.length + ' people');
-  } catch (e) { console.error(e); showToast('⚠ Import failed (' + (e.code || e.message) + ')'); }
-  finally { seeding = false; }
+    const ops = []; let n = 0;
+    legacy.forEach(d => {
+      const p = d.data();
+      p.tasks.forEach((t, idx) => {
+        const data = cleanTask({ ...t, status: t.completed ? 'done' : 'todo', personId: p.id, parentId: null,
+          createdBy: 'import', order: idx, completedAt: t.completedAt || null, startDate: null }, p.id);
+        ops.push({ ref: doc(tasksCol, String(data.id)), data }); n++;
+      });
+      ops.push({ ref: doc(peopleCol, String(p.id)), data: cleanPerson(p, 0) });   // rewrites the person without the old task list
+    });
+    await commitOps(ops);
+    showToast('✅ Upgraded ' + n + ' tasks to the new format', 5000);
+  } catch (e) { console.error(e); showToast('⚠ Upgrade failed (' + (e.code || e.message) + ')', 6000); migrating = false; }
 }
 
-function startSync() {
+async function seedUsers() {
+  if (seededUsers || !isOwnerUser || !gotPeople || !gotUsers) return;
+  seededUsers = true;
+  try {
+    const ops = [];
+    SEED_USERS.forEach(s => {
+      if (usersMap.has(s.email)) return;
+      const p = peopleRaw.find(x => (x.name || '').trim().toLowerCase() === s.person.toLowerCase());
+      if (p) ops.push({ ref: doc(usersCol, s.email), data: { email: s.email, role: s.role, personId: p.id } });
+    });
+    if (ops.length) { await commitOps(ops); showToast('✅ Team logins linked to people'); }
+  } catch (e) { console.error(e); }
+}
+
+/* ── listeners ── */
+function startSync(user) {
   stopSync();
-  unsub = onSnapshot(peopleCol, snap => {
-    setSyncStatus(true);
-    const people = snap.docs.map(d => d.data())
-      .map((p, i) => clean(p, i))
-      .sort((a, b) => a.order - b.order);
-    people.forEach(p => lastSynced.set(String(p.id), canon(p)));
-    if (!people.length && !snap.metadata.fromCache && OWNERS.includes((currentUser.email || '').toLowerCase())) {
-      seedFromDataJson();
-      return;
-    }
-    latestRemote = people;
-    applyLatest();
-  }, err => {
-    console.error(err);
+  const email = (user.email || '').toLowerCase();
+  const fail = what => err => {
+    console.error(what, err);
     const denied = err.code === 'permission-denied';
     setSyncStatus(false, denied ? 'This account does not have access.' : 'Sync error: ' + err.code);
-    if (denied) showToast('⛔ This account does not have access to the dashboard.');
-  });
+    if (denied) showToast('⛔ This account does not have access to the dashboard.', 5000);
+  };
+
+  unsubs.push(onSnapshot(peopleCol, snap => {
+    setSyncStatus(true);
+    peopleRaw = snap.docs.map(d => d.data()); gotPeople = true;
+    if (isOwnerUser) { migrateLegacy(snap.docs); seedUsers(); }
+    assemble();
+  }, fail('people')));
+
+  unsubs.push(onSnapshot(tasksCol, snap => {
+    tasksRaw = snap.docs.map(d => d.data()); gotTasks = true;
+    assemble();
+  }, fail('tasks')));
+
+  const reqQuery = isOwnerUser ? reqCol : query(reqCol, where('createdBy', '==', email));
+  unsubs.push(onSnapshot(reqQuery, snap => {
+    applyRemoteRequests(snap.docs.map(d => d.data()));
+  }, fail('requests')));
+
+  if (isOwnerUser) {
+    unsubs.push(onSnapshot(usersCol, snap => {
+      usersMap = new Map(snap.docs.map(d => [d.id, d.data()])); gotUsers = true; pushMe(); seedUsers();
+    }, fail('users')));
+  } else {
+    unsubs.push(onSnapshot(doc(db, 'users', email), snap => {
+      usersMap = new Map(snap.exists() ? [[email, snap.data()]] : []); gotUsers = true; pushMe();
+    }, fail('user')));
+  }
+  pushMe();
 }
-function stopSync() { if (unsub) { unsub(); unsub = null; } lastSynced.clear(); latestRemote = null; }
+function stopSync() {
+  unsubs.forEach(u => u()); unsubs = [];
+  applied.clear(); latestRemote = null; peopleRaw = []; tasksRaw = []; usersMap = new Map();
+  gotPeople = gotTasks = gotUsers = false; migrating = false; seededUsers = false;
+}
 
 /* ── sign in / out ── */
 const ERRORS = {
@@ -1135,14 +1610,15 @@ window.fbSignOut = () => signOut(auth);
 onAuthStateChanged(auth, user => {
   currentUser = user;
   if (user) {
+    isOwnerUser = OWNERS.includes((user.email || '').toLowerCase());
     $('loginErr').textContent = ''; $('loginErr').style.color = '#b91c1c'; $('loginPassword').value = '';
     $('loginOverlay').classList.add('hidden');
-    $('userEmail').textContent = user.email;
     $('userChip').classList.add('visible');
-    startSync();
+    startSync(user);
   } else {
+    isOwnerUser = false;
     stopSync();
-    applyRemotePeople([]);
+    resetSession();
     $('userChip').classList.remove('visible');
     $('loginOverlay').classList.remove('hidden');
     $('syncStatus').className = 'sync-status'; $('syncStatus').innerHTML = '';
